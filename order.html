@@ -1,0 +1,132 @@
+<!-- order.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Page</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: rgb(248, 210, 177);
+      padding: 30px;
+      color: #333;
+    }
+    .container {
+      margin-top: 90px;
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+    .item-info {
+      flex-grow: 1;
+    }
+    .cancel-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #d11a2a;
+    }
+    .total {
+      text-align: right;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .order-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .order-btn:hover {
+      background-color: #45a049;
+    }
+    .empty-message {
+      text-align: center;
+      font-size: 16px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Your Order Details</h2>
+    <ul id="orderList"></ul>
+    <div class="total" id="totalAmount"></div>
+    <button class="order-btn" onclick="placeOrder()">Order Now</button>
+  </div>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const orderList = document.getElementById('orderList');
+    const totalAmount = document.getElementById('totalAmount');
+
+    function renderCart() {
+      orderList.innerHTML = '';
+      let total = 0;
+
+      if (cart.length === 0) {
+        orderList.innerHTML = `<div class="empty-message">Your cart is empty.</div>`;
+        totalAmount.textContent = '';
+        return;
+      }
+
+      cart.forEach((item, index) => {
+        total += item.qty * item.price;
+        const li = document.createElement('li');
+
+        li.innerHTML = `
+          <div class="item-info">${item.qty}x ${item.name} - $${(item.price * item.qty).toFixed(2)}</div>
+          <button class="cancel-btn" onclick="removeItem(${index})">🗑️</button>
+        `;
+        orderList.appendChild(li);
+      });
+
+      totalAmount.textContent = `Total: $${total.toFixed(2)}`;
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+    }
+
+    function placeOrder() {
+  if (cart.length === 0) {
+    alert("Your cart is empty!");
+    return;
+  }
+  // Save cart to localStorage and go to pay.html
+  window.location.href = 'pay.html';
+}
+
+    renderCart();
+  </script>
+</body>
+</html>

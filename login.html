@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="container">
+        <header style="color: rgb(248, 210, 177);">Login Form</header>
+        <form id="loginForm">
+
+          <div class="field email-field">
+            <div class="input-field">
+              <input type="email" placeholder="Enter your email" class="email" required />
+            </div>
+            <span class="error email-error">
+              <i class="bx bx-error-circle error-icon"></i>
+              <p class="error-text">Please enter a valid email</p>
+            </span>
+          </div>
+          <div class="field create-password">
+            <div class="input-field">
+              <input type="password" placeholder="Password" class="password" required  />
+              <i class="bx bx-hide show-hide"></i>
+            </div>
+            <span class="error password-error">
+              <i class="bx bx-error-circle error-icon"></i>
+              <p class="error-text">
+                Please enter atleast 8 charatcer with number, symbol, small and
+                capital letter.
+              </p>
+            </span>
+          </div>
+          <div class="field confirm-password">
+            <div class="input-field">
+              <input type="password" placeholder="Confirm Password" class="cPassword" required />
+              <i class="bx bx-hide show-hide"></i>
+            </div>
+            <span class="error cPassword-error">
+              <i class="bx bx-error-circle error-icon"></i>
+              <p class="error-text">Password didn't match</p>
+            </span>
+          </div>
+          <div class="links">
+            <a href="#">Forgot Password</a>
+            <a href="signup.html" style="color: rgb(248, 210, 177);">Signup</a>
+          </div>
+          <div class="input-field button">
+            <input type="submit" value="Login Now" />
+          </div>
+        </form>
+      </div>
+      
+   
+      
+      <script src="login.js"></script>
+
+      </body>
+      </html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: rgb(248, 210, 177);
+      padding: 30px;
+      color: #333;
+      text-align: center;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    .btn {
+      display: block;
+      width: 80%;
+      margin: 15px auto;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .cod-btn {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .online-btn {
+      background-color: #2196F3;
+      color: white;
+    }
+    .message {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      animation: fadeIn 1s ease-in-out;
+    }
+    .go-home-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Select Payment Method</h2>
+    <button class="btn cod-btn" onclick="payCOD()">Cash on Delivery</button>
+    <button class="btn online-btn" onclick="payOnline()">Pay Online</button>
+    <div class="message" id="messageBox"></div>
+  </div>
+
+  <!-- Razorpay Script -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    function payCOD() {
+      localStorage.removeItem('cart');
+      const messageBox = document.getElementById('messageBox');
+      messageBox.innerHTML = `
+        <div style="animation: fadeIn 1s ease-in-out;">
+          <p style="font-size: 20px; color: green;">✅ Order Confirmed!</p>
+          <p>Pay cash on delivery. Thank you!</p>
+          <button onclick="goHome()" class="go-home-btn">🏠 Go to Home</button>
+        </div>
+      `;
+    }
+
+    function payOnline() {
+      const options = {
+        "key": "rzp_test_l5NNwEJyLZ9NjM", // Replace with your Razorpay Test Key
+        "amount": getTotalAmount() * 100, // in paise
+        "currency": "INR",
+        "name": "Coffee House",
+        "description": "Thank you for your order!",
+        "handler": function (response) {
+          localStorage.removeItem('cart');
+          const messageBox = document.getElementById('messageBox');
+          messageBox.innerHTML = `
+            <div style="animation: fadeIn 1s ease-in-out;">
+              <p style="font-size: 20px; color: green;">✅ Payment Successful!</p>
+              <p>Your order has been confirmed. Thank you!</p>
+              <button onclick="goHome()" class="go-home-btn">🏠 Go to Home</button>
+            </div>
+          `;
+        },
+        "prefill": {
+          "name": "Customer Name",
+          "email": "customer@example.com",
+          "contact": "9999999999"
+        },
+        "theme": {
+          "color": "#3399cc"
+        }
+      };
+      const rzp1 = new Razorpay(options);
+      rzp1.open();
+
+      rzp1.on('payment.failed', function (response){
+        document.getElementById('messageBox').textContent = "❌ Payment Failed. Please try again.";
+      });
+    }
+
+    function getTotalAmount() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      return cart.reduce((total, item) => total + item.qty * item.price, 0);
+    }
+
+    function goHome() {
+      window.location.href = "index.html"; // change if your home page has a different name
+    }
+  </script>
+</body>
+</html>
